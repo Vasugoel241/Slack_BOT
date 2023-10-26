@@ -15,7 +15,7 @@ def home():
 @app.route("/slack/message_actions", methods=["POST"])
 def slack_message_actions():
     event_data = request.get_json()
-    # print(event_data)
+    print(event_data)
     if event_data['type'] == 'url_verification':
         return jsonify({"challenge": event_data["challenge"]})
     
