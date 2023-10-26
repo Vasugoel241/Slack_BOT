@@ -16,24 +16,25 @@ slack_client = WebClient(token=slack_token)
 signature_verifier = SignatureVerifier(signing_secret)
 
 response = slack_client.auth_test()
-BOT_ID = response['user_id']
+# BOT_ID = response['user_id']
 
 
 def handle_event(event : dict):
-    print(event)
+    # print(event)
     event_type = event["type"]
 
-    if event_type == "message":
+    if event_type == "message" and event.get("subtype") is None:
         channel_id = event["channel"]
         user_id = event["user"]
         message_text = event["text"]
+        BOT_ID = slack_client.api_call("auth.test")["user_id"]
 
-        if 'hello' in message_text.lower():
+        if f"<@{BOT_ID}>" in message_text.lower():
             try:
                 response: SlackResponse = slack_client.chat_postMessage(
                     channel=channel_id,
                     text=f"Hello <@{user_id}>! :wave:"
                 )
-                assert response["message"]["text"] == f"Hello <@{user_id}>! :wave:"
+                # assert response["message"]["text"] == f"Hello <@{user_id}>! :wave:"
             except SlackApiError as e:
                 print(f"Error sending message: {e.response['error']}")
