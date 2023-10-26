@@ -29,7 +29,7 @@ def handle_event(event : dict):
         message_text = event["text"]
         BOT_ID = slack_client.api_call("auth.test")["user_id"]
 
-        if f"<@{BOT_ID}>" in message_text.lower():
+        if f"<@{BOT_ID}>" in message_text:
             try:
                 response: SlackResponse = slack_client.chat_postMessage(
                     channel=channel_id,
