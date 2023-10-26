@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename='app.log',level=logging.DEBUG)
 
 from slack_sdk import WebClient
 from slack_sdk.signature import SignatureVerifier
