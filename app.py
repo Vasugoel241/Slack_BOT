@@ -15,13 +15,14 @@ def home():
 @app.route("/slack/message_actions", methods=["POST"])
 def slack_message_actions():
     event_data = request.get_json()
-    print(event_data)
+   
     if event_data['type'] == 'url_verification':
         return jsonify({"challenge": event_data["challenge"]})
     
-    if event_data['type'] == 'event_callback' and "event" in event_data:
-        event = event_data["event"]
-        slack_message.handle_event(event)
+    # if event_data['type'] == 'event_callback' and "event" in event_data:
+    #     event = event_data["event"]
+    #     slack_message.handle_event(event)
+    slack_message.hello()
 
     return jsonify({"status": "success"}), 200
 
