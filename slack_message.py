@@ -28,7 +28,7 @@ def handle_event(event : dict):
         user_id = event["user"]
         message_text = event["text"]
 
-    if 'hello bot' in message_text.lower():
+    if 'hello' in message_text.lower():
         try:
             response: SlackResponse = slack_client.chat_postMessage(
                 channel=channel_id,
