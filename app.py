@@ -22,8 +22,9 @@ def slack_message_actions():
     # if event_data['type'] == 'event_callback' and "event" in event_data:
     #     event = event_data["event"]
     #     slack_message.handle_event(event)
+    print("Before")
     slack_message.hello()
-
+    print("After")
     return jsonify({"status": "success"}), 200
 
 
