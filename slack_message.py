@@ -25,7 +25,7 @@ def handle_event(event : dict):
     # print(event)
     event_type = event["type"]
 
-    logging.info("EVENT : %s", event)
+    logging.info("Message: %s", event["text"])
     if event_type == "message" and event.get("subtype") is None:
         channel_id = event["channel"]
         user_id = event["user"]
