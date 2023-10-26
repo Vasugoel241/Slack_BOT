@@ -28,12 +28,12 @@ def handle_event(event : dict):
         user_id = event["user"]
         message_text = event["text"]
 
-    if 'hello' in message_text.lower():
-        try:
-            response: SlackResponse = slack_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Hello <@{user_id}>! :wave:"
-            )
-            assert response["message"]["text"] == f"Hello <@{user_id}>! :wave:"
-        except SlackApiError as e:
-            print(f"Error sending message: {e.response['error']}")
+        if 'hello' in message_text.lower():
+            try:
+                response: SlackResponse = slack_client.chat_postMessage(
+                    channel=channel_id,
+                    text=f"Hello <@{user_id}>! :wave:"
+                )
+                assert response["message"]["text"] == f"Hello <@{user_id}>! :wave:"
+            except SlackApiError as e:
+                print(f"Error sending message: {e.response['error']}")
