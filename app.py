@@ -18,12 +18,8 @@ def slack_message_actions():
     if event_data['type'] == 'url_verification':
         return jsonify({"challenge": event_data["challenge"]})
     
-    if "event" in event_data:
+    if event_data['type'] == 'event_callback' and "event" in event_data:
         event = event_data["event"]
         slack_message.handle_event(event)
 
-    return "", 200
-
-
-# if __name__ == "__main__":
-#     app.run(debug = True)
+    return jsonify({"status": "success"}), 200
