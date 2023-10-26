@@ -15,6 +15,9 @@ def home():
 def slack_message_actions():
     event_data = request.get_json()
     # print(event_data)
+    if event_data['type'] == 'url_verification':
+        return jsonify({"challenge": event_data["challenge"]})
+    
     if "event" in event_data:
         event = event_data["event"]
         slack_message.handle_event(event)
