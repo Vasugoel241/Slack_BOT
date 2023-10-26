@@ -27,7 +27,7 @@ def hello():
             text="Hello from your app! :tada:"
             )
     except SlackApiError as e:
-    
+    # You will get a SlackApiError if "ok" is False
         assert e.response["error"]  
 
 def handle_event(event:dict):
@@ -35,7 +35,7 @@ def handle_event(event:dict):
     event_type = event["type"]
 
     # logging.debug("About to call slack_client.chat_postMessage()")
-    # print("About to call slack_client.chat_postMessage()") 
+    print("About to call slack_client.chat_postMessage()") 
 
     if event_type == "message" and event.get("subtype") is None:
         channel_id = event["channel"]
@@ -43,7 +43,7 @@ def handle_event(event:dict):
         message_text = event["text"]
         BOT_ID = slack_client.api_call("auth.test")["user_id"]
 
-        # print("Before bot id")
+        print("Before bot id")
 
         if f"<@{BOT_ID}>" in message_text:
             # logging.debug("Entered the if statement") 
