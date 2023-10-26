@@ -1,11 +1,11 @@
 from flask import Flask,request, jsonify
-import logging 
+# import logging 
 import os
 
 import slack_message
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def home():

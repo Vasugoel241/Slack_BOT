@@ -25,21 +25,28 @@ def handle_event(event : dict):
     # print(event)
     event_type = event["type"]
 
-    logging.debug("About to call slack_client.chat_postMessage()") 
+    logging.debug("About to call slack_client.chat_postMessage()")
+    print("About to call slack_client.chat_postMessage()") 
+
     if event_type == "message" and event.get("subtype") is None:
         channel_id = event["channel"]
         user_id = event["user"]
         message_text = event["text"]
         BOT_ID = slack_client.api_call("auth.test")["user_id"]
 
+        print("Before bot id")
+
         if f"<@{BOT_ID}>" in message_text:
             logging.debug("Entered the if statement") 
+            print("Entered the if statement") 
             try:
                 response: SlackResponse = slack_client.chat_postMessage(
                     channel=channel_id,
                     text=f"Hello <@{user_id}>! :wave:"
                 )
-                logging.debug("Called api") 
+                logging.debug("Called api")
+                print("Called api")
+                 
                 # assert response["message"]["text"] == f"Hello <@{user_id}>! :wave:"
             except SlackApiError as e:
                 print(f"Error sending message: {e.response['error']}")
