@@ -25,9 +25,9 @@ def handle_event(event : dict):
     # print(event)
     event_type = event["type"]
 
+    logging.info("EVENT : %s", event)
     if event_type == "message" and event.get("subtype") is None:
         channel_id = event["channel"]
-        logging.info("Channel ID: %s", channel_id)
         user_id = event["user"]
         message_text = event["text"]
         BOT_ID = slack_client.api_call("auth.test")["user_id"]
