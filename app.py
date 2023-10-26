@@ -23,3 +23,13 @@ def slack_message_actions():
         slack_message.handle_event(event)
 
     return jsonify({"status": "success"}), 200
+
+
+if __name__ == "__main__":
+   
+    if os.environ.get('SLACK_BOT_TOKEN') is None:
+        print ("SLACK_BOT_TOKEN env variable is not defined")
+    elif os.environ.get('CHATBOT_NAME') is None:
+        print ("CHATBOT_NAME env variable is not defined")
+   
+    app.run(debug = True, host='0.0.0.0')
