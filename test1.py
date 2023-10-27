@@ -10,7 +10,10 @@ load_dotenv(env_path)
 # webhook_url = os.getenv('SLACK_WEBHOOK_URL')
 webhook_url = 'https://hooks.slack.com/services/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'
 
-client = WebClient()
+env_path = ".env"
+load_dotenv(env_path)
+slack_token = os.environ['SLACK_BOT_TOKEN']
+client = WebClient(token=slack_token)
 
 def send_slack_message(message):
     try:
