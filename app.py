@@ -1,7 +1,6 @@
 from flask import Flask,request, jsonify
 # import logging 
 import os
-import os
 from dotenv import load_dotenv
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
