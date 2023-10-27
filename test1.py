@@ -1,5 +1,6 @@
 import json
 from flask import Flask, request
+import logging
 from slack_sdk import WebClient
 import os
 from dotenv import load_dotenv
@@ -12,16 +13,15 @@ SLACK_TOKEN = os.environ['SLACK_BOT_TOKEN']
 
 app = Flask(__name__)
 
-# Route to handle incoming POST requests
+
 @app.route('/post-data', methods=['POST'])
 def post_data():
-    # Get data sent in the POST request
+    app.logger.info('Received POST request')
     data = request.get_json()
+    app.logger.info('Received data: %s', data)
 
-    # Extract relevant information from the data (customize this based on your data structure)
     message = data.get('message', 'No message found in the data')
 
-    # Post the message to a Slack channel
     client = WebClient(token=SLACK_TOKEN)
     channel = '#bot-testing'
     client.chat_postMessage(channel=channel, text=message)
