@@ -5,7 +5,7 @@ from slack_sdk.errors import SlackApiError
 import os
 from dotenv import load_dotenv
 import logging
-logging.basicConfig(filename="newfile.log",
+logging.basicConfig(filename="logfile.log",
                     format='%(asctime)s %(message)s',
                     filemode='w')
 
@@ -26,7 +26,7 @@ app = Flask(__name__)
 
 
 @app.route("/slack/post-message", methods=["POST"])
-def slack_message_actions():
+def slack_post_message():
     event_data = request.get_json()
     message = event_data["message"]
     try:
@@ -40,7 +40,7 @@ def slack_message_actions():
 
 
 @app.route("/slack/get-message", methods=["GET"])
-def slack_message_actions():
+def slack_get_message():
     event_data = request.get_json()
     message = event_data["message"]
     try:
