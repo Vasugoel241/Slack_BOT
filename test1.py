@@ -1,33 +1,57 @@
-import json
-from flask import Flask, request
-import logging
-from slack_sdk import WebClient
 import os
+from slack_sdk import WebClient
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 env_path = ".env"
 load_dotenv(env_path)
 
-SLACK_TOKEN = os.environ['SLACK_BOT_TOKEN']
+# Get Slack webhook URL from environment variable
+# webhook_url = os.getenv('SLACK_WEBHOOK_URL')
+webhook_url = 'https://hooks.slack.com/services/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'
+
+client = WebClient()
+
+def send_slack_message(message):
+    try:
+        response = client.chat_postMessage(
+            channel='#bot-testing', 
+            text=message
+        )
+        if response['ok']:
+            print("Message sent successfully!")
+        else:
+            print("Failed to send message. Error:", response['error'])
+    except Exception as e:
+        print("An error occurred:", e)
+
+def main():
+    # Get message from user input or set a default message
+    message = input("Enter the message you want to send to Slack: ")
+    if not message:
+        message = "Hello from the Python script using Slack webhook!"
+    
+    # Send the message using Slack webhook
+    send_slack_message(message)
+
+if __name__ == "__main__":
+    main()
 
 
-app = Flask(__name__)
+# Convert the payload to JSON format
+# payload_json = json.dumps(payload)
 
+# # Set the headers for the request
+# headers = {
+#     "Content-type": "application/json"
+# }
 
-@app.route('/post-data', methods=['POST'])
-def post_data():
-    app.logger.info('Received POST request')
-    data = request.get_json()
-    app.logger.info('Received data: %s', data)
+# Send a POST request to the Slack Webhook URL with the payload
+# response = requests.post(webhook_url, data=payload_json, headers=headers)
 
-    message = data.get('message', 'No message found in the data')
-
-    client = WebClient(token=SLACK_TOKEN)
-    channel = '#bot-testing'
-    response = client.chat_postMessage(channel=channel, text=message)
-
-    return 'Data received and posted to Slack channel!'
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port= 5000)
-
+# Check the response
+# if response.status_code == 200:
+#     print("Message sent successfully to Slack!")
+# else:
+#     print("Failed to send message to Slack. Status code:", response.status_code)
+#     print("Response:", response.text)
