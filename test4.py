@@ -16,7 +16,7 @@ def slack_webhook():
     response_message = {
         'text': processed_message
     }
-    webhook_url = 'https://hooks.slack.com/services/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/slack'
+    webhook_url = 'https://hooks.slack.com/services/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'
 
     requests.post(webhook_url, json=response_message)
 

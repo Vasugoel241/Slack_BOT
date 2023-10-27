@@ -8,7 +8,7 @@ load_dotenv(env_path)
 
 # Get Slack webhook URL from environment variable
 # webhook_url = os.getenv('SLACK_WEBHOOK_URL')
-webhook_url = 'https://hooks.slack.com/services/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'
+webhook_url = 'https://hooks.slack.com/services/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'
 
 env_path = ".env"
 load_dotenv(env_path)
@@ -39,4 +39,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-l

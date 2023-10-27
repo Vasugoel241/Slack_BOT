@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 
-webhook_url = 'https://hooks.slack.com/services/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'
+webhook_url = 'https://hooks.slack.com/services/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'
 
 
 @app.route('/send-message', methods=['POST'])
