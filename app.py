@@ -5,7 +5,12 @@ from slack_sdk.errors import SlackApiError
 import os
 from dotenv import load_dotenv
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename="newfile.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 
 env_path = ".env"
@@ -19,20 +24,33 @@ slack_client = WebClient(token=slack_token)
 
 app = Flask(__name__)
 
-# logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/slack/post-message", methods=["POST"])
 def slack_message_actions():
     event_data = request.get_json()
+    message = event_data["message"]
     try:
         response = slack_client.chat_postMessage(
             channel="bot-testing",
-            text="Hello from your app! :tada:"
+            text=message
             )
     except SlackApiError as e:
         assert e.response["error"] 
     return jsonify({"status": "success"}), 200
 
+
+@app.route("/slack/get-message", methods=["GET"])
+def slack_message_actions():
+    event_data = request.get_json()
+    message = event_data["message"]
+    try:
+        response = slack_client.chat_postMessage(
+            channel="bot-testing",
+            text=message
+            )
+    except SlackApiError as e:
+        assert e.response["error"] 
+    return jsonify({"status": "success"}), 200
 
 if __name__ == "__main__":
    
@@ -43,4 +61,4 @@ if __name__ == "__main__":
     elif os.environ.get('SLACK_WEBHOOK_URL') is None:
         print ("SLACK_WEBHOOK_URL env variable is not defined")
    
-    app.run(debug = True, host='0.0.0.0', port=5000)
+    app.run(debug = True, host='0.0.0.0')
