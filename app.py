@@ -25,54 +25,58 @@ slack_client = WebClient(token=slack_token)
 app = Flask(__name__)
 
 
-@app.route("/slack/post-message", methods=["POST"])
-def slack_post_message():
-    event_data = request.get_json()
-    message = event_data["message"]
-    try:
-        response = slack_client.chat_postMessage(
-            channel="bot-testing",
-            text=message
-            )
-    except SlackApiError as e:
-        assert e.response["error"] 
-    return jsonify({"status": "success"}), 200
+# @app.route("/slack/post-message", methods=["POST"])
+# def slack_post_message():
+#     event_data = request.get_json()
+#     message = event_data["message"]
+#     try:
+#         response = slack_client.chat_postMessage(
+#             channel="bot-testing",
+#             text=message
+#             )
+#     except SlackApiError as e:
+#         assert e.response["error"] 
+#     return jsonify({"status": "success"}), 200
 
-slack_message = ""
-@app.route("/slack/events", methods=["POST"])
-def slack_events():
-    event_data = request.get_json()
+# slack_message = ""
+# @app.route("/slack/events", methods=["POST"])
+# def slack_events():
+#     event_data = request.get_json()
 
-    # Verify the request to make sure it's from Slack
-    if "challenge" in event_data:
-        # Respond to the URL verification challenge during app installation
-        return jsonify({"challenge": event_data["challenge"]}), 200
+#     # Verify the request to make sure it's from Slack
+#     if "challenge" in event_data:
+#         # Respond to the URL verification challenge during app installation
+#         return jsonify({"challenge": event_data["challenge"]}), 200
     
   
-    if "event" in event_data:
-        event = event_data["event"]
-        slack_message = event["text"]
+#     if "event" in event_data:
+#         event = event_data["event"]
+#         slack_message = event["text"]
 
-        # Check if the event is an "app_mention" event
-        if event["type"] == "app_mention":
-            # Check if the message mentions the bot
-            if f"<@{slack_client.api_call('auth.test')['user_id']}>" in event["text"]:
-                # Respond to the mention with a message
-                channel_id = event["channel"]
-                try:
-                    response = slack_client.chat_postMessage(
-                        channel=channel_id,
-                        text="Hello! I received your mention!"
-                    )
-                    print("Message sent successfully:", response["message"]["text"])
-                except SlackApiError as e:
-                    print("Error sending message:", e.response["error"])
+#         # Check if the event is an "app_mention" event
+#         if event["type"] == "app_mention":
+#             # Check if the message mentions the bot
+#             if f"<@{slack_client.api_call('auth.test')['user_id']}>" in event["text"]:
+#                 # Respond to the mention with a message
+#                 channel_id = event["channel"]
+#                 try:
+#                     response = slack_client.chat_postMessage(
+#                         channel=channel_id,
+#                         text="Hello! I received your mention!"
+#                     )
+#                     print("Message sent successfully:", response["message"]["text"])
+#                 except SlackApiError as e:
+#                     print("Error sending message:", e.response["error"])
     
-    return jsonify({"status": "success"}), 200
+#     return jsonify({"status": "success"}), 200
 
-@app.route("/slack/get-message", methods=["GET"])
-def slack_get_message():
-    return jsonify({"message": slack_message}), 200
+# @app.route("/slack/get-message", methods=["GET"])
+# def slack_get_message():
+#     return jsonify({"message": slack_message}), 200
+
+@app.route("/")
+def hello():
+    return"<h1>Hello World</h1>"
 
 if __name__ == "__main__":
    
@@ -84,3 +88,4 @@ if __name__ == "__main__":
         print ("SLACK_WEBHOOK_URL env variable is not defined")
    
     app.run(debug = True, host='0.0.0.0')
+
