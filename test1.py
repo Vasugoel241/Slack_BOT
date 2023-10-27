@@ -24,10 +24,10 @@ def post_data():
 
     client = WebClient(token=SLACK_TOKEN)
     channel = '#bot-testing'
-    client.chat_postMessage(channel=channel, text=message)
+    response = client.chat_postMessage(channel=channel, text=message)
 
     return 'Data received and posted to Slack channel!'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(host='0.0.0.0', port= 5000)
 
