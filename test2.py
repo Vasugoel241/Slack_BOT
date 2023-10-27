@@ -1,9 +1,9 @@
 import os
 import requests
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-env_path = ".env"
-load_dotenv(env_path)
+# env_path = ".env"
+# load_dotenv(env_path)
 
 # Get Slack webhook URL from environment variable
 # webhook_url = os.getenv('SLACK_WEBHOOK_URL')
