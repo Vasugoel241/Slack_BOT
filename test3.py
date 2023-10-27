@@ -1,18 +1,12 @@
 from flask import Flask, request, jsonify
-import os
 import requests
-from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-# Load environment variables from .env file
-env_path = ".env"
-load_dotenv(env_path)
 
-# Get Slack webhook URL from environment variable
-webhook_url = os.getenv('SLACK_WEBHOOK_URL')
+webhook_url = 'https://hooks.slack.com/services/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'
 
-# Endpoint to send a message to Slack
+
 @app.route('/send-message', methods=['POST'])
 def send_message():
     try:
@@ -20,12 +14,12 @@ def send_message():
         message = data.get('message', 'Hello from the Flask app using Slack webhook!')
 
         payload = {
-            'channel': '#general',  # Specify the Slack channel where you want to send the message
+            'channel': '#bot-testing', 
             'text': message
         }
 
         response = requests.post(webhook_url, json=payload)
-        response.raise_for_status()  # Raise an exception if the request was not successful
+        response.raise_for_status()  
         return jsonify({"status": "success", "message": "Message sent successfully!"}), 200
     except requests.exceptions.HTTPError as errh:
         return jsonify({"status": "error", "message": f"HTTP Error: {errh}"}), 500

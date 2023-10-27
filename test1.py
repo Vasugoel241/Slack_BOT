@@ -39,22 +39,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# Convert the payload to JSON format
-# payload_json = json.dumps(payload)
-
-# # Set the headers for the request
-# headers = {
-#     "Content-type": "application/json"
-# }
-
-# Send a POST request to the Slack Webhook URL with the payload
-# response = requests.post(webhook_url, data=payload_json, headers=headers)
-
-# Check the response
-# if response.status_code == 200:
-#     print("Message sent successfully to Slack!")
-# else:
-#     print("Failed to send message to Slack. Status code:", response.status_code)
-#     print("Response:", response.text)
+l
