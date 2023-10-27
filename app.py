@@ -55,6 +55,7 @@ def slack_events():
     if "event" in event_data:
         event = event_data["event"]
         slack_message = event["text"]
+        print(slack_message)
 
         # Check if the event is an "app_mention" event
         if event["type"] == "app_mention":
@@ -71,7 +72,7 @@ def slack_events():
                 except SlackApiError as e:
                     print("Error sending message:", e.response["error"])
     
-    return jsonify({"message": slack_message}), 200
+    return jsonify({"status": "success",}), 200
 
 # @app.route("/slack/get-message", methods=["GET"])
 # def slack_get_message():
