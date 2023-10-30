@@ -72,7 +72,7 @@ def slack_events():
                 except SlackApiError as e:
                     print("Error sending message:", e.response["error"])
     
-    return jsonify({"status": "success",}), 200
+    return jsonify({"message": slack_message}), 200
 
 # @app.route("/slack/get-message", methods=["GET"])
 # def slack_get_message():
