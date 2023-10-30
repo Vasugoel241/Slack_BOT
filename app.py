@@ -20,12 +20,12 @@ def hello():
 def slack_post_message():
     event_data = request.get_json()
     status = Slack_Message.post_message(event_data)
-    return jsonify(status)
+    return status
     
 
 @app.route("/slack/events", methods=["GET","POST"])
 def slack_events_message():
     event_data = request.get_json()
     status = Slack_Message.slack_events(event_data)
-    return jsonify(status)
+    return status
 
