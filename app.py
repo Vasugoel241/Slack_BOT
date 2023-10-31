@@ -23,13 +23,13 @@ def slack_post_message():
     logging.info("Executed post message function")
     return slack_data
 
-@app.route("/slack/events", methods=["GET","POST"])
-def slack_events_message():
-    event_data = request.get_json()
-    logging.info("Entering slack event message function")
-    slack_data = Slack_Message.slack_events(event_data)
-    logging.info("Executed slack event message function")
-    return jsonify(slack_data)
+# @app.route("/slack/events", methods=["GET","POST"])
+# def slack_events_message():
+#     event_data = request.get_json()
+#     logging.info("Entering slack event message function")
+#     slack_data = Slack_Message.slack_events(event_data)
+#     logging.info("Executed slack event message function")
+#     return jsonify(slack_data)
 
 
 @app.route("/slack/interactivity", methods=["GET","POST"])
