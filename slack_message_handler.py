@@ -34,7 +34,7 @@ class Slack_Message:
                                     "text": "Approve"
                                 },
                                 "style": "primary",
-                                # "action_id":"approve_button",
+                                "action_id":"approve_button",
                                 "value": "approve_button"
                             },
                             {
@@ -45,7 +45,7 @@ class Slack_Message:
                                     "text": "Reject"
                                 },
                                 "style": "danger",
-                                # "action_id":"reject_button",
+                                "action_id":"reject_button",
                                 "value": "reject_button"
                             }
                         ]
@@ -70,61 +70,31 @@ class Slack_Message:
     
 
     def interactive(event_data):
-        if event_data['type'] == 'url_verification':
-            return {'challenge': event_data['challenge']}
+        # if event_data['type'] == 'url_verification':
+        #     return {'challenge': event_data['challenge']}
+        # event_data = json.loads(payload)
+        # if event_data['type'] == 'block_actions':
+        action = event_data['actions'][0]
+        user = event_data['user']['id']
+        channel_id = event_data['channel']['id']
         
-        if event_data['type'] == 'block_actions':
-            action = event_data['actions'][0]
-            user = event_data['user']['id']
-            channel_id = event_data['channel']['id']
-            
-            if action['action_id'] == 'approve_button':
-                # Action on approval
-                response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'."
-            
-            elif action['action_id'] == 'reject_button':
-                # Action on rejection
-                response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'."
+        if action['action_id'] == 'approve_button':
+            # Action on approval
+            response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'."
+        
+        elif action['action_id'] == 'reject_button':
+            # Action on rejection
+            response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'."
 
-            try:
-                response = slack_client.chat_postMessage(
-                        channel=channel_id,
-                        text=response_text
-                    )
-                print(response)
-            except SlackApiError as e:
-                print("Error sending message:", e.response['error'])
-                return CommonResponseHelper.send_error_response(str(e.response["error"]))  
+        try:
+            response = slack_client.chat_postMessage(
+                    channel=channel_id,
+                    text=response_text
+                )
+            print(response)
+        except SlackApiError as e:
+            print("Error sending message:", e.response['error'])
+            return CommonResponseHelper.send_error_response(str(e.response["error"]))  
             
         return CommonResponseHelper.send_success_response(action['action_id'])
     
-
-    def slack_events(event_data):
-        # if event_data['type'] == 'url_verification':
-        #     return {'challenge': event_data['challenge']}
-        
-        logging.info("entered slack event function: %s", event_data['type'])
-        if event_data['type'] == 'actions':
-            action = event_data['actions'][0]['value']
-            user = event_data['user']['id']
-            channel_id = event_data['channel']['id']
-            
-            if action == 'approve_button':
-                # Action on approval
-                response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'."
-            
-            elif action == 'reject_button':
-                # Action on rejection
-                response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'."
-
-            try:
-                response = slack_client.chat_postMessage(
-                        channel=channel_id,
-                        text=response_text
-                    )
-                print(response)
-            except SlackApiError as e:
-                print("Error sending message:", e.response['error'])
-                return CommonResponseHelper.send_error_response(str(e.response["error"]))  
-            
-        return CommonResponseHelper.send_success_response(action['action_id'])

@@ -1,5 +1,6 @@
 from flask import Flask,request, jsonify
 import logging
+import json
 
 from slack_message_handler import Slack_Message
 from config import Config
@@ -33,8 +34,9 @@ def slack_events_message():
 
 @app.route("/slack/interactivity", methods=["GET","POST"])
 def slack_interactive_message():
-    event_data = request.get_json()
+    payload = request.form['payload']
+    data = json.loads(payload)
     logging.info("Entering slack event message function")
-    slack_data = Slack_Message.interactive_message(event_data)
+    slack_data = Slack_Message.interactive_message(data)
     logging.info("Executed slack event message function")
     return jsonify(slack_data)
