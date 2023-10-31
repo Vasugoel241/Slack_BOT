@@ -28,5 +28,4 @@ def slack_events_message():
     logging.info("Entering slack event message function")
     slack_data = Slack_Message.slack_events(event_data)
     logging.info("Executed slack event message function")
-    return slack_data
-
+    return jsonify(slack_data)
