@@ -1,6 +1,7 @@
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import logging
+import json
 
 from common_reponse_helper import CommonResponseHelper
 from config import Config
@@ -69,7 +70,8 @@ class Slack_Message:
         return CommonResponseHelper.send_success_response(message)
     
 
-    def interactive(event_data):
+    def interactive(payload):
+        event_data = json.load(payload)
         action = event_data['actions'][0]
         user = event_data['user']['id']
         channel_id = event_data['channel']['id']
