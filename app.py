@@ -29,3 +29,12 @@ def slack_events_message():
     slack_data = Slack_Message.slack_events(event_data)
     logging.info("Executed slack event message function")
     return jsonify(slack_data)
+
+
+@app.route("/slack/interactivity", methods=["GET","POST"])
+def slack_interactive_message():
+    event_data = request.get_json()
+    logging.info("Entering slack event message function")
+    slack_data = Slack_Message.interactive_message(event_data)
+    logging.info("Executed slack event message function")
+    return jsonify(slack_data)

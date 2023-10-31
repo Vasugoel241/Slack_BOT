@@ -34,7 +34,8 @@ class Slack_Message:
                                     "text": "Approve"
                                 },
                                 "style": "primary",
-                                "value": "approve"
+                                "action_id":"approve_button"
+                                "value": "approve_button"
                             },
                             {
                                 "type": "button",
@@ -44,7 +45,8 @@ class Slack_Message:
                                     "text": "Reject"
                                 },
                                 "style": "danger",
-                                "value": "reject"
+                                "action_id":"reject_button"
+                                "value": "reject_button"
                             }
                         ]
                     }
@@ -67,69 +69,60 @@ class Slack_Message:
         return CommonResponseHelper.send_success_response(message)
     
 
-    # def interactive():
-    # # Verify the request signature
-    #     if not signature_verifier.is_valid_request(request.get_data(), request.headers):
-    #         return "Invalid Request", 403
-
-    #     # Parse the interactive message payload
-    #     payload = request.form['payload']
-    #     payload_dict = json.loads(payload)
-
-    #     # Handle the interactive message actions
-    #     if payload_dict['type'] == 'block_actions':
-    #         action = payload_dict['actions'][0]  # Assuming only one action for simplicity
-    #         if action['action_id'] == 'approve_button':
-    #             # Handle "Approve" button action
-    #             client.chat_postMessage(
-    #                 channel=payload_dict['channel']['id'],
-    #                 text='You clicked the Approve button!'
-    #             )
-    #         elif action['action_id'] == 'reject_button':
-    #             # Handle "Reject" button action
-    #             client.chat_postMessage(
-    #                 channel=payload_dict['channel']['id'],
-    #                 text='You clicked the Reject button!'
-    #             )
-
-    #     return '', 200
-
-    def slack_events(event_data):
-          
+    def interactive(event_data):
         if event_data['type'] == 'url_verification':
             return {'challenge': event_data['challenge']}
+        
+        if event_data['type'] == 'block_actions':
+            action = event_data['actions'][0]  # Assuming only one action for simplicity
+            user = event_data['user']['id']
+            channel_id = event_data['channel']['id']
+            
+            if action['action_id'] == 'approve_button':
+                # Action on approval
+                response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'."
+            
+            elif action['action_id'] == 'reject_button':
+                # Action on rejection
+                response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'."
 
-        if event_data['type'] == 'interactive_message':
-            callback_data = event_data['callback_id']
-            print(callback_data)
-            if callback_data == 'approval_buttons':
-                action = event_data['actions'][0]['value']
-                user = event_data['user']['id']
-                username = event_data['user']['username']
-                channel = event_data['channel']['id']
-                # job_name = event_data['message']['attachments'][0]['text'].split('Job: ')[1].strip()
-
-                if action == 'approve':
-                    # Handle approval logic (e.g., proceed with the build)
-                    # You can add your logic here
-
-                    response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'"
-                elif action == 'reject':
-                    # Handle rejection logic (e.g., stop the build)
-                    # You can add your logic here
-
-                    response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'. Stopping the build."
-
-                # Send the response back to Slack
-                try:
-                    response = slack_client.chat_postMessage(
-                        channel=channel,
+            try:
+                response = slack_client.chat_postMessage(
+                        channel=channel_id,
                         text=response_text
                     )
-                    print(response)
-                except SlackApiError as e:
-                    print("Error sending message:", e.response['error'])
-                    return CommonResponseHelper.send_error_response(str(e.response["error"]))  
-        
-        return CommonResponseHelper.send_success_response(action)
+                print(response)
+            except SlackApiError as e:
+                print("Error sending message:", e.response['error'])
+                return CommonResponseHelper.send_error_response(str(e.response["error"]))  
+            
+        return CommonResponseHelper.send_success_response(action['action_id'])
+    
 
+    def slack_events(event_data):
+        if "event" in event_data:
+            event = event_data["event"]
+            slack_message = event["text"]
+            print(slack_message)
+
+            if event["type"] == "app_mention":
+
+                BOT_ID = slack_client.api_call('auth.test')['user_id']
+
+                # Check if the message mentions the bot
+                if f"<@{BOT_ID}>" in event["text"]:
+                    # Respond to the mention with a message
+                    channel_id = event["channel"]
+                    
+                    try:
+                        response = slack_client.chat_postMessage(
+                            channel=channel_id,
+                            text="Hello! I received your mention!"
+                        )
+                        print("Message sent successfully:", response["message"]["text"])
+                    
+                    except SlackApiError as e:
+                        print("Error sending message:", e.response["error"])
+                        return CommonResponseHelper.send_error_response(str(e.response["error"]))  
+        
+        return CommonResponseHelper.send_success_response(slack_message)
