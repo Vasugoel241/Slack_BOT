@@ -34,7 +34,7 @@ class Slack_Message:
                                     "text": "Approve"
                                 },
                                 "style": "primary",
-                                "action_id":"approve_button"
+                                "action_id":"approve_button",
                                 "value": "approve_button"
                             },
                             {
@@ -45,7 +45,7 @@ class Slack_Message:
                                     "text": "Reject"
                                 },
                                 "style": "danger",
-                                "action_id":"reject_button"
+                                "action_id":"reject_button",
                                 "value": "reject_button"
                             }
                         ]
