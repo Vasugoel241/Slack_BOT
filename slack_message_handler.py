@@ -101,6 +101,7 @@ class Slack_Message:
 
         if event_data['type'] == 'interactive_message':
             callback_data = event_data['callback_id']
+            print(callback_data)
             if callback_data == 'approval_buttons':
                 action = event_data['actions'][0]['value']
                 user = event_data['user']['id']
