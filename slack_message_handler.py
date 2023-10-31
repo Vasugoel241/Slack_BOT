@@ -100,29 +100,30 @@ class Slack_Message:
     
 
     def slack_events(event_data):
-        if "event" in event_data:
-            event = event_data["event"]
-            slack_message = event["text"]
-            print(slack_message)
-
-            if event["type"] == "app_mention":
-
-                BOT_ID = slack_client.api_call('auth.test')['user_id']
-
-                # Check if the message mentions the bot
-                if f"<@{BOT_ID}>" in event["text"]:
-                    # Respond to the mention with a message
-                    channel_id = event["channel"]
-                    
-                    try:
-                        response = slack_client.chat_postMessage(
-                            channel=channel_id,
-                            text="Hello! I received your mention!"
-                        )
-                        print("Message sent successfully:", response["message"]["text"])
-                    
-                    except SlackApiError as e:
-                        print("Error sending message:", e.response["error"])
-                        return CommonResponseHelper.send_error_response(str(e.response["error"]))  
+        if event_data['type'] == 'url_verification':
+            return {'challenge': event_data['challenge']}
         
-        return CommonResponseHelper.send_success_response(slack_message)
+        if event_data['type'] == 'block_actions':
+            action = event_data['actions'][0]
+            user = event_data['user']['id']
+            channel_id = event_data['channel']['id']
+            
+            if action['action_id'] == 'approve_button':
+                # Action on approval
+                response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'."
+            
+            elif action['action_id'] == 'reject_button':
+                # Action on rejection
+                response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'."
+
+            try:
+                response = slack_client.chat_postMessage(
+                        channel=channel_id,
+                        text=response_text
+                    )
+                print(response)
+            except SlackApiError as e:
+                print("Error sending message:", e.response['error'])
+                return CommonResponseHelper.send_error_response(str(e.response["error"]))  
+            
+        return CommonResponseHelper.send_success_response(action['action_id'])
