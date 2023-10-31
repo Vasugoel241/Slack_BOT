@@ -9,9 +9,9 @@ class Config:
     signing_secret = os.environ['SIGNING_SECRET']
     webhook_url = os.environ['SLACK_WEBHOOK_URL']
 
-    jenkins_url = os.environ['JENKINS_URL']
-    jenkins_username = os.environ['JENKINS_USERNAME']
-    jenkins_password = os.environ['JENKINS_PASSWORD']
+    # jenkins_url = os.environ['JENKINS_URL']
+    # jenkins_username = os.environ['JENKINS_USERNAME']
+    # jenkins_password = os.environ['JENKINS_PASSWORD']
 
     def configure_logging():
         logging.basicConfig(filename="logfile.log",
