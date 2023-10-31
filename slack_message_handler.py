@@ -10,6 +10,7 @@ slack_client = WebClient(token=Config.slack_token)
 
 response = slack_client.auth_test()
 class Slack_Message:
+    job_name = ""
     def interactive_message(channel_id, message):
         slack_message = { "channel":channel_id,
                 "text" : message,         
@@ -53,7 +54,7 @@ class Slack_Message:
 
     def post_message(event_data):
         # print(event_data)
-        # message = event_data["message"]
+        Slack_Message.job_name= event_data["job-name"]
         message = Slack_Message.interactive_message("bot-testing","")
         try:
             response = slack_client.chat_postMessage(**message)
@@ -93,7 +94,6 @@ class Slack_Message:
 
     #     return '', 200
 
-
     def slack_events(event_data):
           
         if event_data['type'] == 'url_verification':
@@ -106,18 +106,18 @@ class Slack_Message:
                 user = event_data['user']['id']
                 username = event_data['user']['username']
                 channel = event_data['channel']['id']
-                job_name = event_data['message']['attachments'][0]['text'].split('Job: ')[1].strip()
+                # job_name = event_data['message']['attachments'][0]['text'].split('Job: ')[1].strip()
 
                 if action == 'approve':
                     # Handle approval logic (e.g., proceed with the build)
                     # You can add your logic here
 
-                    response_text = f"<@{user}> has approved the build for Jenkins job '{job_name}'. Proceeding with the build."
+                    response_text = f"<@{user}> has approved the build for Jenkins job '{Slack_Message.job_name}'"
                 elif action == 'reject':
                     # Handle rejection logic (e.g., stop the build)
                     # You can add your logic here
 
-                    response_text = f"<@{user}> has rejected the build for Jenkins job '{job_name}'. Stopping the build."
+                    response_text = f"<@{user}> has rejected the build for Jenkins job '{Slack_Message.job_name}'. Stopping the build."
 
                 # Send the response back to Slack
                 try:
