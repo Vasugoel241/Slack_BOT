@@ -100,8 +100,8 @@ class Slack_Message:
     
 
     def slack_events(event_data):
-        if event_data['type'] == 'url_verification':
-            return {'challenge': event_data['challenge']}
+        # if event_data['type'] == 'url_verification':
+        #     return {'challenge': event_data['challenge']}
         
         logging.info("entered slack event function: %s", event_data['type'])
         if event_data['type'] == 'actions':
