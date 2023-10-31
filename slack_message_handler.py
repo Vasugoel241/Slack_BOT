@@ -74,7 +74,7 @@ class Slack_Message:
             return {'challenge': event_data['challenge']}
         
         if event_data['type'] == 'block_actions':
-            action = event_data['actions'][0]  # Assuming only one action for simplicity
+            action = event_data['actions'][0]
             user = event_data['user']['id']
             channel_id = event_data['channel']['id']
             
