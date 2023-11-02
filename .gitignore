@@ -4,3 +4,4 @@ __pycache__
 .env
 logfile.log
 run.md
+.txt
