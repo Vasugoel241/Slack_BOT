@@ -33,7 +33,7 @@ def slack_post_message():
 
 @app.route("/slack/interactivity", methods=["GET","POST"])
 def slack_interactive_message():
-    payload = request.form['payload']
+    payload = request.form.get['payload']
     # data = json.loads(payload)
     logging.info("Entering slack event message function")
     slack_data = Slack_Message.interactive_message(payload)
