@@ -1,21 +1,38 @@
 import os
 import logging
+import logging.config
+import yaml
+import mysql.connector
 from dotenv import load_dotenv
+
 env_path = ".env"
 load_dotenv(env_path)
 
+
+def setuplogger():
+        with open('logging_config.yaml', 'rt') as f:
+            config = yaml.safe_load(f.read())
+        logging.config.dictConfig(config)
+logger = logging.getLogger('app')
 class Config:
-    slack_token = os.environ['SLACK_BOT_TOKEN']
+    
+    slack_token = os.environ['SLACK_BOT_OAUTH_TOKEN']
     signing_secret = os.environ['SIGNING_SECRET']
-    webhook_url = os.environ['SLACK_WEBHOOK_URL']
+    channel_id = os.environ['CHANNEL_ID']
 
-    # jenkins_url = os.environ['JENKINS_URL']
-    # jenkins_username = os.environ['JENKINS_USERNAME']
-    # jenkins_password = os.environ['JENKINS_PASSWORD']
+    mysql_host = os.environ['MYSQL_HOST']
+    mysql_username = os.environ['MYSQL_USERNAME']
+    mysql_password = os.environ['MYSQL_PASSWORD']
+    mysql_database = os.environ['MYSQL_DATABASE']
 
-    def configure_logging():
-        logging.basicConfig(filename="logfile.log",
-                    format='%(asctime)s %(message)s',
-                    filemode='w')
-        logger = logging.getLogger()
-        logger.setLevel(logging.DEBUG)
+    file =  open('./auth_users.json', 'r')
+
+    def connect_to_database():
+        connection = mysql.connector.connect(
+            host=Config.mysql_host,
+            user=Config.mysql_username,
+            passwd=Config.mysql_password,
+            db=Config.mysql_database
+            )
+        
+        return connection

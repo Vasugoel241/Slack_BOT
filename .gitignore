@@ -1,7 +1,6 @@
 __pycache__
 .venv
 .vscode
-.env
 logfile.log
 run.md
 .txt
